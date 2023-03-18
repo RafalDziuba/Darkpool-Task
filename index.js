@@ -1,6 +1,13 @@
 const createButton = document.querySelector('button');
+const board = document.querySelector('.board');
+const rover = document.createElement('div');
+rover.classList.add('rover');
+rover.style.position = 'relative';
+rover.style.left = 0;
+rover.style.top = 0;
 let horizontalMove;
 let verticalMove;
+
 const createGrid = (rows, cols) => {
   const square = document.querySelector('.square');
   if (square) {
@@ -11,8 +18,6 @@ const createGrid = (rows, cols) => {
     alert('Liczba wierszy i kolumn być nieparzysta!');
     return;
   }
-
-  const board = document.querySelector('.board');
 
   board.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
   board.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
@@ -25,12 +30,12 @@ const createGrid = (rows, cols) => {
       board.appendChild(square);
 
       if (i === Math.floor(rows / 2) && j === Math.floor(cols / 2)) {
-        const rover = document.createElement('div');
-        rover.classList.add('rover');
         square.appendChild(rover);
       }
     }
   }
+  horizontalMove = document.querySelector('.square').getBoundingClientRect().width;
+  verticalMove = document.querySelector('.square').getBoundingClientRect().height;
 };
 
 createButton.addEventListener('click', () => {
@@ -40,4 +45,23 @@ createButton.addEventListener('click', () => {
   createGrid(rows.value, cols.value);
   rows.value = 0;
   cols.value = 0;
+});
+
+window.addEventListener('keyup', (e) => {
+
+
+  switch (e.key) {
+    case 'ArrowLeft':
+      rover.style.left = parseInt(rover.style.left) - horizontalMove + 'px';
+      break;
+    case 'ArrowRight':
+      rover.style.left = parseInt(rover.style.left) + horizontalMove + 'px';
+      break;
+    case 'ArrowUp':
+      rover.style.top = parseInt(rover.style.top) - verticalMove + 'px';
+      break;
+    case 'ArrowDown':
+      rover.style.top = parseInt(rover.style.top) + verticalMove + 'px';
+      break;
+  }
 });
