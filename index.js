@@ -86,6 +86,7 @@ window.addEventListener('keyup', (e) => {
       if (boardSize.left > rover.getBoundingClientRect().left) {
         alert('nope!');
         rover.style.left = parseInt(rover.style.left) + moveRange + 'px';
+        return;
       }
       history.push({
         range: moveRange,
@@ -95,6 +96,11 @@ window.addEventListener('keyup', (e) => {
       break;
     case 'ArrowRight':
       rover.style.left = parseInt(rover.style.left) + moveRange + 'px';
+      if (boardSize.right < rover.getBoundingClientRect().right) {
+        alert('nope!');
+        rover.style.left = parseInt(rover.style.left) - moveRange + 'px';
+        return;
+      }
       history.push({
         range: moveRange,
         direction: 'w prawo',
@@ -103,6 +109,11 @@ window.addEventListener('keyup', (e) => {
       break;
     case 'ArrowUp':
       rover.style.top = parseInt(rover.style.top) - moveRange + 'px';
+      if (boardSize.top > rover.getBoundingClientRect().top) {
+        alert('nope!');
+        rover.style.top = parseInt(rover.style.top) + moveRange + 'px';
+        return;
+      }
       history.push({
         range: moveRange,
         direction: 'w górę',
@@ -111,6 +122,11 @@ window.addEventListener('keyup', (e) => {
       break;
     case 'ArrowDown':
       rover.style.top = parseInt(rover.style.top) + moveRange + 'px';
+      if (boardSize.bottom < rover.getBoundingClientRect().bottom) {
+        alert('nope!');
+        rover.style.top = parseInt(rover.style.top) - moveRange + 'px';
+        return;
+      }
       history.push({
         range: moveRange,
         direction: 'w dół',
