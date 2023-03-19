@@ -1,6 +1,7 @@
 const createButton = document.querySelector('button');
 const rover = document.createElement('div');
 const board = document.querySelector('.board');
+const history = [];
 rover.classList.add('rover');
 rover.style.position = 'relative';
 rover.style.left = 0;
@@ -9,8 +10,7 @@ const moveRange = 50;
 let boardSize;
 
 const createGrid = (rows, cols) => {
-  const square = document.querySelector('.square');
-  if (square) {
+  if (board.getBoundingClientRect().width > 0) {
     alert('One board is enough!');
     return;
   }
@@ -39,6 +39,11 @@ const createGrid = (rows, cols) => {
     }
   }
 
+  const squares = document.querySelectorAll('.square');
+  for (let i = 0; i < squares.length; i++) {
+    squares[i].id = i + 1;
+  }
+
   boardSize = document.querySelector('.board').getBoundingClientRect();
   horizontalMove = document.querySelector('.square').getBoundingClientRect().width;
   verticalMove = document.querySelector('.square').getBoundingClientRect().height;
@@ -53,6 +58,27 @@ createButton.addEventListener('click', () => {
   cols.value = 0;
 });
 
+const toField = () => {
+  const roverPosX = rover.getBoundingClientRect().x;
+  const roverPosY = rover.getBoundingClientRect().y;
+  const fields = document.querySelectorAll('.square');
+  for (let i = 0; i < fields.length; i++) {
+    if (roverPosX === fields[i].getBoundingClientRect().x && roverPosY === fields[i].getBoundingClientRect().y) {
+      return fields[i].id;
+    }
+  }
+};
+
+const createLogs = () => {
+  const logsContainer = document.querySelector('.logs');
+  logsContainer.innerHTML = '';
+  for (let i = 0; i < history.length; i++) {
+    const text = document.createElement('p');
+    text.textContent = `Łazik wykonał ruch ${history[i].direction} o ${history[i].range} na pole ${history[i].fieldNr}`;
+    logsContainer.appendChild(text);
+  }
+};
+
 window.addEventListener('keyup', (e) => {
   switch (e.key) {
     case 'ArrowLeft':
@@ -61,15 +87,36 @@ window.addEventListener('keyup', (e) => {
         alert('nope!');
         rover.style.left = parseInt(rover.style.left) + moveRange + 'px';
       }
+      history.push({
+        range: moveRange,
+        direction: 'w lewo',
+        fieldNr: toField(),
+      });
       break;
     case 'ArrowRight':
       rover.style.left = parseInt(rover.style.left) + moveRange + 'px';
+      history.push({
+        range: moveRange,
+        direction: 'w prawo',
+        fieldNr: toField(),
+      });
       break;
     case 'ArrowUp':
       rover.style.top = parseInt(rover.style.top) - moveRange + 'px';
+      history.push({
+        range: moveRange,
+        direction: 'w górę',
+        fieldNr: toField(),
+      });
       break;
     case 'ArrowDown':
       rover.style.top = parseInt(rover.style.top) + moveRange + 'px';
+      history.push({
+        range: moveRange,
+        direction: 'w dół',
+        fieldNr: toField(),
+      });
       break;
   }
+  createLogs();
 });
