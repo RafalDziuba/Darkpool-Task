@@ -64,3 +64,15 @@ button {
   background-position: center;
   background-size: 80% 80%;
 }
+
+.logs-content {
+  display: none;
+}
+
+#toggle-logs {
+  display: none;
+}
+
+.show {
+  display: block !important;
+}

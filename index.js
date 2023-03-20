@@ -1,4 +1,6 @@
 const createButton = document.querySelector('button');
+const logsButton = document.querySelector('#toggle-logs');
+const logsContainer = document.querySelector('.logs-content');
 const rover = document.createElement('div');
 const board = document.querySelector('.board');
 const history = [];
@@ -47,6 +49,7 @@ const createGrid = (rows, cols) => {
   boardSize = document.querySelector('.board').getBoundingClientRect();
   horizontalMove = document.querySelector('.square').getBoundingClientRect().width;
   verticalMove = document.querySelector('.square').getBoundingClientRect().height;
+  logsButton.classList.toggle('show');
 };
 
 createButton.addEventListener('click', () => {
@@ -70,7 +73,6 @@ const toField = () => {
 };
 
 const createLogs = () => {
-  const logsContainer = document.querySelector('.logs');
   logsContainer.innerHTML = '';
   for (let i = 0; i < history.length; i++) {
     const text = document.createElement('p');
@@ -78,6 +80,14 @@ const createLogs = () => {
     logsContainer.appendChild(text);
   }
 };
+
+logsButton.addEventListener('click', () => {
+  if (history.length === 0) {
+    alert('Make some moves first!');
+    return;
+  }
+  logsContainer.classList.toggle('show');
+});
 
 window.addEventListener('keyup', (e) => {
   switch (e.key) {
@@ -93,6 +103,7 @@ window.addEventListener('keyup', (e) => {
         direction: 'w lewo',
         fieldNr: toField(),
       });
+      createLogs();
       break;
     case 'ArrowRight':
       rover.style.left = parseInt(rover.style.left) + moveRange + 'px';
@@ -106,6 +117,7 @@ window.addEventListener('keyup', (e) => {
         direction: 'w prawo',
         fieldNr: toField(),
       });
+      createLogs();
       break;
     case 'ArrowUp':
       rover.style.top = parseInt(rover.style.top) - moveRange + 'px';
@@ -119,6 +131,7 @@ window.addEventListener('keyup', (e) => {
         direction: 'w górę',
         fieldNr: toField(),
       });
+      createLogs();
       break;
     case 'ArrowDown':
       rover.style.top = parseInt(rover.style.top) + moveRange + 'px';
@@ -132,7 +145,7 @@ window.addEventListener('keyup', (e) => {
         direction: 'w dół',
         fieldNr: toField(),
       });
+      createLogs();
       break;
   }
-  createLogs();
 });
