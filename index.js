@@ -2,9 +2,9 @@ const createButton = document.querySelector('button');
 const logsButton = document.querySelector('#toggle-logs');
 const logsContainer = document.querySelector('.logs-content');
 const rover = document.createElement('div');
+rover.classList.add('rover');
 const board = document.querySelector('.board');
 const history = [];
-rover.classList.add('rover');
 rover.style.position = 'relative';
 rover.style.left = 0;
 rover.style.top = 0;
@@ -17,11 +17,11 @@ const createGrid = (rows, cols) => {
     return;
   }
   if (rows % 2 === 0 || cols % 2 === 0) {
-    alert('Liczba wierszy i kolumn być nieparzysta!');
+    alert('Only odd numbers are allowed!');
     return;
   }
   if (rows < 0 || cols < 0) {
-    alert('Liczba nie może być ujemna!');
+    alert(`You can't use negative number!`);
     return;
   }
 
@@ -32,7 +32,7 @@ const createGrid = (rows, cols) => {
     for (let j = 0; j < cols; j++) {
       const square = document.createElement('div');
       square.classList.add('square');
-      square.style.backgroundColor = (i + j) % 2 === 0 ? '#eeeed2' : '#769656';
+      square.style.backgroundColor = (i + j) % 2 === 0 ? '#96a5ab' : '#586c79';
       board.appendChild(square);
 
       if (i === Math.floor(rows / 2) && j === Math.floor(cols / 2)) {
@@ -52,15 +52,6 @@ const createGrid = (rows, cols) => {
   logsButton.classList.toggle('show');
 };
 
-createButton.addEventListener('click', () => {
-  let cols = document.querySelector('#cols');
-  let rows = document.querySelector('#rows');
-
-  createGrid(rows.value, cols.value);
-  rows.value = 0;
-  cols.value = 0;
-});
-
 const toField = () => {
   const roverPosX = rover.getBoundingClientRect().x;
   const roverPosY = rover.getBoundingClientRect().y;
@@ -76,10 +67,19 @@ const createLogs = () => {
   logsContainer.innerHTML = '';
   for (let i = 0; i < history.length; i++) {
     const text = document.createElement('p');
-    text.textContent = `Łazik wykonał ruch ${history[i].direction} o ${history[i].range} na pole ${history[i].fieldNr}`;
+    text.textContent = `The rover moved ${history[i].direction} by ${history[i].range} pixels to field nr ${history[i].fieldNr}`;
     logsContainer.appendChild(text);
   }
 };
+
+createButton.addEventListener('click', () => {
+  let cols = document.querySelector('#cols');
+  let rows = document.querySelector('#rows');
+
+  createGrid(rows.value, cols.value);
+  rows.value = 0;
+  cols.value = 0;
+});
 
 logsButton.addEventListener('click', () => {
   if (history.length === 0) {
@@ -87,62 +87,68 @@ logsButton.addEventListener('click', () => {
     return;
   }
   logsContainer.classList.toggle('show');
+  if (logsContainer.classList.contains('show')) {
+    logsButton.textContent = 'Hide history';
+    console.log(logsButton);
+  } else {
+    logsButton.textContent = 'Show history';
+  }
 });
 
 window.addEventListener('keyup', (e) => {
   switch (e.key) {
     case 'ArrowLeft':
       rover.style.left = parseInt(rover.style.left) - moveRange + 'px';
-      if (boardSize.left > rover.getBoundingClientRect().left) {
-        alert('nope!');
+      if (Math.round(boardSize.left) > Math.round(rover.getBoundingClientRect().left)) {
+        alert(`You can't leave board!`);
         rover.style.left = parseInt(rover.style.left) + moveRange + 'px';
         return;
       }
       history.push({
         range: moveRange,
-        direction: 'w lewo',
+        direction: 'to the left',
         fieldNr: toField(),
       });
       createLogs();
       break;
     case 'ArrowRight':
       rover.style.left = parseInt(rover.style.left) + moveRange + 'px';
-      if (boardSize.right < rover.getBoundingClientRect().right) {
-        alert('nope!');
+      if (Math.round(boardSize.right) < Math.round(rover.getBoundingClientRect().right)) {
+        alert(`You can't leave board!`);
         rover.style.left = parseInt(rover.style.left) - moveRange + 'px';
         return;
       }
       history.push({
         range: moveRange,
-        direction: 'w prawo',
+        direction: 'to the right',
         fieldNr: toField(),
       });
       createLogs();
       break;
     case 'ArrowUp':
       rover.style.top = parseInt(rover.style.top) - moveRange + 'px';
-      if (boardSize.top > rover.getBoundingClientRect().top) {
-        alert('nope!');
+      if (Math.round(boardSize.top) > Math.round(rover.getBoundingClientRect().top)) {
+        alert(`You can't leave board!`);
         rover.style.top = parseInt(rover.style.top) + moveRange + 'px';
         return;
       }
       history.push({
         range: moveRange,
-        direction: 'w górę',
+        direction: 'up',
         fieldNr: toField(),
       });
       createLogs();
       break;
     case 'ArrowDown':
       rover.style.top = parseInt(rover.style.top) + moveRange + 'px';
-      if (boardSize.bottom < rover.getBoundingClientRect().bottom) {
-        alert('nope!');
+      if (Math.round(boardSize.bottom) < Math.round(rover.getBoundingClientRect().bottom)) {
+        alert(`You can't leave board!`);
         rover.style.top = parseInt(rover.style.top) - moveRange + 'px';
         return;
       }
       history.push({
         range: moveRange,
-        direction: 'w dół',
+        direction: 'down',
         fieldNr: toField(),
       });
       createLogs();

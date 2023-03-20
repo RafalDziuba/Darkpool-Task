@@ -2,44 +2,76 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'DotGothic16', sans-serif;
+  color: aliceblue;
 }
 
 body {
   width: 100%;
   height: 100vh;
-  background-color: antiquewhite;
+  display: flex;
+  overflow: hidden;
+  background: #0f0c29;
+  background: -webkit-linear-gradient(to right, #24243e, #302b63, #0f0c29); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+}
+
+.left-side {
+  padding-left: 20px;
 }
 
 .menu {
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+  height: 280px;
+  padding: 20px 0;
   gap: 10px;
-  margin-left: 10px;
 }
 
 .menu label {
+  width: 200px;
   display: flex;
   flex-direction: column;
-  width: 200px;
 }
 
-button {
-  width: 100px;
+.menu input {
+  padding: 8px 5px;
+  background-color: indigo;
+  border: 1px solid white;
+}
+
+.menu button {
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px 0;
+  border: 2px solid white;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.menu button:hover {
+  background-color: aliceblue;
+  color: #302b63;
 }
 
 .game-container {
   width: 100%;
-  margin-top: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 30px;
 }
 
 .board {
   display: inline-grid;
-  margin: 0 auto;
   justify-content: center;
   grid-auto-columns: auto;
+  margin: 0 auto;
+  box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px,
+    rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
 }
 
 .field {
@@ -53,24 +85,48 @@ button {
 }
 
 .rover {
+  width: 100%;
+  height: 100%;
   position: absolute;
   z-index: 1;
   left: 0;
   top: 0;
-  width: 100%;
-  height: 100%;
   background-image: url('/assets/tank.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 80% 80%;
 }
 
+.logs-container {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .logs-content {
+  height: 300px;
   display: none;
+  overflow-y: auto;
+}
+
+.logs-content p {
+  margin: 5px;
+  padding: 5px 10px;
+  border: 1px solid grey;
 }
 
 #toggle-logs {
   display: none;
+  width: 140px;
+  margin: 20px 0;
+  padding: 5px 5px;
+  background-color: #343232;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#toggle-logs:hover {
+  background-color: rgb(109, 109, 111);
 }
 
 .show {
