@@ -24,6 +24,10 @@ const createGrid = (rows, cols) => {
     alert(`You can't use negative number!`);
     return;
   }
+  if (rows > 13 || cols > 13) {
+    alert('Board is too large! Max amount of cols%rows is 13');
+    return;
+  }
 
   board.style.gridTemplateColumns = `repeat(${cols}, ${moveRange}px)`;
   board.style.gridTemplateRows = `repeat(${rows}, ${moveRange}px`;
