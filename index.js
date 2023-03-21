@@ -1,15 +1,15 @@
+const history = [];
+let boardSize;
+const moveRange = 50;
 const createButton = document.querySelector('button');
 const logsButton = document.querySelector('#toggle-logs');
 const logsContainer = document.querySelector('.logs-content');
+const board = document.querySelector('.board');
 const rover = document.createElement('div');
 rover.classList.add('rover');
-const board = document.querySelector('.board');
-const history = [];
 rover.style.position = 'relative';
 rover.style.left = 0;
 rover.style.top = 0;
-const moveRange = 50;
-let boardSize;
 
 const createGrid = (rows, cols) => {
   if (board.getBoundingClientRect().width > 0) {
@@ -50,9 +50,7 @@ const createGrid = (rows, cols) => {
     squares[i].id = i + 1;
   }
 
-  boardSize = document.querySelector('.board').getBoundingClientRect();
-  horizontalMove = document.querySelector('.square').getBoundingClientRect().width;
-  verticalMove = document.querySelector('.square').getBoundingClientRect().height;
+  boardSize = board.getBoundingClientRect();
   logsButton.classList.toggle('show');
 };
 
@@ -76,6 +74,16 @@ const createLogs = () => {
   }
 };
 
+const updateHistory = (direction) => {
+  history.push({
+    range: moveRange,
+    fieldNr: toField(),
+    direction: direction,
+  });
+
+  createLogs();
+};
+
 createButton.addEventListener('click', () => {
   let cols = document.querySelector('#cols');
   let rows = document.querySelector('#rows');
@@ -93,7 +101,6 @@ logsButton.addEventListener('click', () => {
   logsContainer.classList.toggle('show');
   if (logsContainer.classList.contains('show')) {
     logsButton.textContent = 'Hide history';
-    console.log(logsButton);
   } else {
     logsButton.textContent = 'Show history';
   }
@@ -108,12 +115,7 @@ window.addEventListener('keyup', (e) => {
         rover.style.left = parseInt(rover.style.left) + moveRange + 'px';
         return;
       }
-      history.push({
-        range: moveRange,
-        direction: 'to the left',
-        fieldNr: toField(),
-      });
-      createLogs();
+      updateHistory('to the left');
       break;
     case 'ArrowRight':
       rover.style.left = parseInt(rover.style.left) + moveRange + 'px';
@@ -122,12 +124,7 @@ window.addEventListener('keyup', (e) => {
         rover.style.left = parseInt(rover.style.left) - moveRange + 'px';
         return;
       }
-      history.push({
-        range: moveRange,
-        direction: 'to the right',
-        fieldNr: toField(),
-      });
-      createLogs();
+      updateHistory('to the right');
       break;
     case 'ArrowUp':
       rover.style.top = parseInt(rover.style.top) - moveRange + 'px';
@@ -136,12 +133,7 @@ window.addEventListener('keyup', (e) => {
         rover.style.top = parseInt(rover.style.top) + moveRange + 'px';
         return;
       }
-      history.push({
-        range: moveRange,
-        direction: 'up',
-        fieldNr: toField(),
-      });
-      createLogs();
+      updateHistory('up');
       break;
     case 'ArrowDown':
       rover.style.top = parseInt(rover.style.top) + moveRange + 'px';
@@ -150,12 +142,7 @@ window.addEventListener('keyup', (e) => {
         rover.style.top = parseInt(rover.style.top) - moveRange + 'px';
         return;
       }
-      history.push({
-        range: moveRange,
-        direction: 'down',
-        fieldNr: toField(),
-      });
-      createLogs();
+      updateHistory('down');
       break;
   }
 });
